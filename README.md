@@ -27,6 +27,7 @@ As a result, we obtain a small $8^4$ look-up table that provides a plausible and
 <hr>
 
 <h3><b>Precomputed LUTs</b></h3>
+Precomputed LUTs for two parameterizations are in the <code>LUT</code> directory.
 <table>
   <thead>
     <tr>
@@ -59,6 +60,7 @@ As a result, we obtain a small $8^4$ look-up table that provides a plausible and
 
 <hr>
 <h3><b>Using the Code</b></h3>
+All fitting code is contained in the <code>fitting/</code> directory.
 Fitting your own LUT can be done by:<br><br>
 
 <p><b>Parameterization:</b> &alpha;<sub>x</sub> , &alpha;<sub>y</sub> , &theta; , &phi;</p>
