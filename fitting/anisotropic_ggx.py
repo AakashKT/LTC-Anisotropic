@@ -99,7 +99,7 @@ class GGXAnisoBatch:
         # V: shape expected ( b, 3 )
         # alphax, alphay: shape expected ( b )
 
-        L, _, V, alphax, alphay = utils.sample_anisotropic(V.shape[0], 10000, V, alphax, alphay)
+        L, _, V, alphax, alphay = utils.sample_anisotropic_batch(V.shape[0], 10000, V, alphax, alphay)
 
         H = (V+L)
         H = H / torch.linalg.norm(H, dim=2, keepdim=True)
@@ -174,7 +174,7 @@ class GGXAniso:
         return d
 
 if __name__ == '__main__':
-    ggx = GGXAniso()
+    ggx = GGXAnisoBatch()
 
     theta = 0
     theta = theta * np.pi / 180.0
@@ -185,8 +185,8 @@ if __name__ == '__main__':
     wo = wo / torch.linalg.norm(wo)
     wo = torch.unsqueeze(wo, dim=0).cuda()
 
-    alphax = torch.tensor([2.0/7.0], dtype=torch.float, device='cuda:0')
-    alphay = torch.tensor([2.0/7.0], dtype=torch.float, device='cuda:0')
+    alphax = torch.tensor([1.0], dtype=torch.float, device='cuda:0')
+    alphay = torch.tensor([1.0], dtype=torch.float, device='cuda:0')
 
     nD, fD = ggx.calc_nD_fD(wo, alphax, alphay)
 
