@@ -8,20 +8,20 @@ import anisotropic_ggx
 import ltc
 import utils
 
-def optimize_loop(args, model, target):
+def optimize_loop(args, lut_size, model, target):
     device = torch.device("cuda:0")
 
-    alpha_list = torch.zeros((8,8), dtype=torch.float, device=device)
-    theta_list = torch.zeros((8,8), dtype=torch.float, device=device)
+    alpha_list = torch.zeros(lut_size, dtype=torch.float, device=device)
+    theta_list = torch.zeros(lut_size, dtype=torch.float, device=device)
 
-    for alpha in range(8):
-        for theta in range(8):
+    for alpha in range(lut_size[0]):
+        for theta in range(lut_size[1]):
             # alpha in range [0, 1]
-            a = alpha / 7.0
-            a = max(a, 0.0001)
+            a = alpha / (lut_size[0]-1)
+            a = max(a, 0.01)
             
             # theta in range [0, pi/2]
-            t = theta / 7.0 * 0.9999 * math.pi/2.0 # Mul by 0.999 to avoid grazing angle
+            t = theta / (lut_size[1]-1) * 0.99 * math.pi/2.0 # Mul by 0.999 to avoid grazing angle
 
             # store
             alpha_list[alpha, theta] = a
@@ -257,8 +257,8 @@ def optimize_loop(args, model, target):
 
     # Finally, calculate amplitudes (and fresnel)
     amplitudes, fresnel = target.calc_nD_fD(wo, alpha_list, alpha_list)
-    amplitudes = amplitudes.reshape(8, 8).cpu().numpy()
-    fresnel = fresnel.reshape(8, 8).cpu().numpy()
+    amplitudes = amplitudes.reshape(lut_size).cpu().numpy()
+    fresnel = fresnel.reshape(lut_size).cpu().numpy()
 
     np.save('%s/alpha_theta_amplitudes.npy' % (args.savedir), amplitudes)
     np.save('%s/alpha_theta_fresnel.npy' % (args.savedir), amplitudes)
@@ -297,4 +297,4 @@ if __name__ == '__main__':
     model = ltc.LTCIsotropic(lut_size=lut_size)
     model.cuda()
 
-    optimize_loop(args, model, target)
+    optimize_loop(args, lut_size, model, target)
