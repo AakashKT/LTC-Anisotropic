@@ -261,7 +261,7 @@ def optimize_loop(args, lut_size, model, target):
     fresnel = fresnel.reshape(lut_size).cpu().numpy()
 
     np.save('%s/alpha_theta_amplitudes.npy' % (args.savedir), amplitudes)
-    np.save('%s/alpha_theta_fresnel.npy' % (args.savedir), amplitudes)
+    np.save('%s/alpha_theta_fresnel.npy' % (args.savedir), fresnel)
 
 
 
